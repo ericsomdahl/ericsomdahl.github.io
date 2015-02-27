@@ -15,7 +15,7 @@ http://ericsomdahl.github.io
 Pondering the ponderables
 </description>
 <lastBuildDate>
-Thu, 26 Feb 2015 21:53:51 -0500
+Thu, 26 Feb 2015 22:15:56 -0500
 </lastBuildDate>
 <author>
 Eric Somdahl
@@ -31,7 +31,7 @@ http://ericsomdahl.github.io/posts/2015-02-26.html
 Setup
 </title>
 <description>
-&lt;h3&gt;&lt;a name=&quot;hi&amp;#95;there&quot;&gt;&lt;/a&gt;Hi There&lt;/h3&gt;
+&lt;h3&gt;&lt;a name=&quot;hi&amp;#95;there&quot;&gt;&lt;/a&gt;Hi There&lt;/h3&gt;&lt;p&gt;This is my first post to what I hope will be a vaguely useful blog.  If only for myself -- as a means of recording useful things I stumble across as I solve problems in either my work or my recreational software development.&lt;/p&gt;&lt;p&gt;I may also post about motorcycles.  Or judo. I like to learn about those things as well.&lt;/p&gt;&lt;p&gt;I think my first task will be to do something to automate this posting workflow. I am currently learning &lt;a href='http://clojure.org'&gt;Clojure&lt;/a&gt; and in an effort to eat some of my own dogfood I am using &lt;a href='http://cryogenweb.org'&gt;Cryogen&lt;/a&gt; to generate this site.  Surely there is some way to get &lt;a href='http://leiningen.org'&gt;Leiningen&lt;/a&gt; to push this to Github for me...&lt;/p&gt;
 </description>
 <pubDate>
 Thu, 26 Feb 2015 00:00:00 -0500
