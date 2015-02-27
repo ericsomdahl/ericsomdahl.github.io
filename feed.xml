@@ -15,17 +15,38 @@ http://ericsomdahl.github.io
 Pondering the ponderables
 </description>
 <lastBuildDate>
-Thu, 26 Feb 2015 22:15:56 -0500
+Fri, 27 Feb 2015 07:41:50 -0500
 </lastBuildDate>
 <author>
 Eric Somdahl
 </author>
 <item>
 <guid>
-http://ericsomdahl.github.io/posts/2015-02-26.html
+http://ericsomdahl.github.io/posts/2015-02-27-Cryogen-Workflow.html
 </guid>
 <link>
-http://ericsomdahl.github.io/posts/2015-02-26.html
+http://ericsomdahl.github.io/posts/2015-02-27-Cryogen-Workflow.html
+</link>
+<title>
+Cryogen Workflow
+</title>
+<description>
+&lt;h3&gt;&lt;a name=&quot;the&amp;#95;github&amp;#95;deployment&amp;#95;plot&amp;#95;tickens&quot;&gt;&lt;/a&gt;The github deployment plot tickens&lt;/h3&gt;In order to deploy my &lt;a href='http://cryogenweb.org'&gt;Cryogen&lt;/a&gt; blog onto github.io, I had created two different repos&lt;ul&gt;&lt;li&gt;My Cryogen project&lt;/li&gt;&lt;li&gt;the github.io generated pages&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;After running &lt;pre&gt;&lt;code&gt;lein ring server-headless 
+ &lt;/code&gt;&lt;/pre&gt; in the cryogen project I would manually copy the generated files from the /resources/public/ folder to the root of the github.io repo.  I assumed I was missing something.&lt;/p&gt;&lt;p&gt;According to &lt;a href='http://tangrammer.github.io/posts/02-12-2014-cryogen-and-github.html'&gt;this page&lt;/a&gt;,  this is basically it.  Very meh.&lt;/p&gt;&lt;p&gt;Perhaps a Leiningen plugin is in order.&lt;/p&gt;
+</description>
+<pubDate>
+Fri, 27 Feb 2015 00:00:00 -0500
+</pubDate>
+<author>
+Eric Somdahl
+</author>
+</item>
+<item>
+<guid>
+http://ericsomdahl.github.io/posts/2015-02-26-Setup.html
+</guid>
+<link>
+http://ericsomdahl.github.io/posts/2015-02-26-Setup.html
 </link>
 <title>
 Setup

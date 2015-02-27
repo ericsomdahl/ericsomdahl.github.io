@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Dev Thoughts: Archives</title>
+    <title>Dev Thoughts: Cryogen Workflow</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700' rel='stylesheet'
           type='text/css'>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css">
-    <link href="css/screen.css" rel="stylesheet" type="text/css" />
+    <link href="../css/screen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -29,7 +29,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li ><a href="/index.html">Home</a></li>
                 <li
-                 class="active" ><a href="/archives.html">Archives</a></li>
+                ><a href="/archives.html">Archives</a></li>
                 
                 <li
                 >
@@ -50,24 +50,39 @@
         <div class="col-lg-9">
             <div id="content">
                 
-<div id="posts">
-    <div id="page-header">
-        <h2>Archives</h2>
+<div id="post">
+    <div id="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">February 27, 2015</div>
+        
     </div>
+    <h2>Cryogen Workflow</h2>
+</div>
+<div>
     
-        <h4>2015 February</h4>
-        <ul>
-        
-        <li>
-            Feb 27 - <a href="/posts/2015-02-27-Cryogen-Workflow.html">Cryogen Workflow</a>
-        </li>
-        
-        <li>
-            Feb 26 - <a href="/posts/2015-02-26-Setup.html">Setup</a>
-        </li>
-        
-        </ul>
+    <h3><a name="the&#95;github&#95;deployment&#95;plot&#95;tickens"></a>The github deployment plot tickens</h3>In order to deploy my <a href='http://cryogenweb.org'>Cryogen</a> blog onto github.io, I had created two different repos<ul><li>My Cryogen project</li><li>the github.io generated pages</li></ul><p>After running <pre><code>lein ring server-headless 
+ </code></pre> in the cryogen project I would manually copy the generated files from the /resources/public/ folder to the root of the github.io repo.  I assumed I was missing something.</p><p>According to <a href='http://tangrammer.github.io/posts/02-12-2014-cryogen-and-github.html'>this page</a>,  this is basically it.  Very meh.</p><p>Perhaps a Leiningen plugin is in order.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
     
+    <a href="/tags/cryogen.html">cryogen</a>
+    
+    <a href="/tags/leiningen.html">leiningen</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/posts/2015-02-26-Setup.html">Setup &raquo;</a>
+        
+    </div>
+
+    
+
 
 </div>
 
@@ -118,7 +133,7 @@
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="js/highlight.pack.js" type="text/javascript"></script>
+<script src="../js/highlight.pack.js" type="text/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
