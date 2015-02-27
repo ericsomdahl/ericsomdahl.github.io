@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url>
 <loc>
-http://ericsomdahl.github.ioblog/posts/2015-02-26.html
+http://ericsomdahl.github.ioposts/2015-02-26.html
 </loc>
 <lastmod>
 2015-02-26
@@ -10,7 +10,7 @@ http://ericsomdahl.github.ioblog/posts/2015-02-26.html
 </url>
 <url>
 <loc>
-http://ericsomdahl.github.ioblog/404.html
+http://ericsomdahl.github.io404.html
 </loc>
 <lastmod>
 2015-02-26
@@ -18,7 +18,7 @@ http://ericsomdahl.github.ioblog/404.html
 </url>
 <url>
 <loc>
-http://ericsomdahl.github.ioblog/index.html
+http://ericsomdahl.github.ioindex.html
 </loc>
 <lastmod>
 2015-02-26
@@ -26,7 +26,7 @@ http://ericsomdahl.github.ioblog/index.html
 </url>
 <url>
 <loc>
-http://ericsomdahl.github.ioblog/tags/cryogen.html
+http://ericsomdahl.github.iotags/cryogen.html
 </loc>
 <lastmod>
 2015-02-26
@@ -34,7 +34,7 @@ http://ericsomdahl.github.ioblog/tags/cryogen.html
 </url>
 <url>
 <loc>
-http://ericsomdahl.github.ioblog/pages/about.html
+http://ericsomdahl.github.iopages/about.html
 </loc>
 <lastmod>
 2015-02-26
@@ -42,7 +42,7 @@ http://ericsomdahl.github.ioblog/pages/about.html
 </url>
 <url>
 <loc>
-http://ericsomdahl.github.ioblog/archives.html
+http://ericsomdahl.github.ioarchives.html
 </loc>
 <lastmod>
 2015-02-26
