@@ -15,11 +15,117 @@ http://ericsomdahl.github.io
 Pondering the ponderables
 </description>
 <lastBuildDate>
-Fri, 06 Mar 2015 08:02:38 -0500
+Sun, 08 Mar 2015 19:33:05 -0400
 </lastBuildDate>
 <author>
 Eric Somdahl
 </author>
+<item>
+<guid>
+http://ericsomdahl.github.io/posts/2015-03-07-gevents1.html
+</guid>
+<link>
+http://ericsomdahl.github.io/posts/2015-03-07-gevents1.html
+</link>
+<title>
+Clojure web scraping with Enlive
+</title>
+<description>
+&lt;p&gt;This is my &lt;a href='http://youtu.be/hooKVstzbz0?t=1m22s'&gt;Leeroy Jenkins&lt;/a&gt; moment in Clojure.&lt;/p&gt;&lt;p&gt;I am creating a web app that combines my interest in judo and desire to learn Clojure.  This app will combine various sources of data to create a calendar of upcoming grappling events.  I am not limiting it to judo... I have found several other sources of info for BJJ and submission wrestling as well. Most are web sources but a few others are more interesting: Facebook API and even CalDAV could be touched. I wish it to be as automated as possible so scraping is the order of the day. I already have a somewhat detailed plan for the app, to be posted about later.&lt;/p&gt;&lt;p&gt;I think the community may find it useful -- because of the competition among the various sport governing bodies this information is scattered.&lt;/p&gt;&lt;p&gt;The first order of business is getting some data. A lot of this is thanks to Dave Nolan's &lt;a href='https://github.com/swannodette/enlive-tutorial/'&gt;Enlive Tutorial&lt;/a&gt;. The first data source will be &lt;a href='http://www.teamusa.org/USA-Judo/Events'&gt;USA Judo's Event Calendar&lt;/a&gt;.  I would like to give a shout-out to USA Judo, for having an easily-parsed, well-designed website.  It makes this process easier.&lt;/p&gt;&lt;p&gt;The structure of the calendar is&lt;ul&gt;&lt;li&gt;paginated, with 10 results per page&lt;/li&gt;&lt;li&gt;the page number is indicated with a single url parameter&lt;/li&gt;&lt;li&gt;the CSS selector for a single event is &quot;div list-item clearfix&quot;&lt;/li&gt;&lt;li&gt;if a page number is requested for which there are no results (i.e requesting page 10 when there are only 80 results)   yields a 200 status code result but an empty selector&lt;/li&gt;&lt;/ul&gt;The scaping code starts with a few basics:&lt;pre&gt;&lt;code&gt;&amp;#40;ns grapplevents-rest.scraper.usa-judo&amp;#41;
+
+;base url for USA Judo published events
+&amp;#40;def base-url &amp;quot;http://www.teamusa.org/USA-Judo/Events&amp;quot;&amp;#41;
+
+;the pages are structured to return 10 results per page
+&amp;#40;def results-per-page 10&amp;#41;
+
+&amp;#40;defn url-by-page
+  &amp;quot;Construct a URL for an single page of results&amp;quot;
+  &amp;#91;page&amp;#93;
+  &amp;#40;str base-url &amp;quot;?pg=&amp;quot; page&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt; Unit tests for this are not very interesting&lt;pre&gt;&lt;code&gt;&amp;#40;ns grapplevents-rest.scraper.usa-judo-test
+  &amp;#40;:require &amp;#91;clojure.test :refer :all&amp;#93;
+            &amp;#91;grapplevents-rest.scraper.usa-judo :as usa&amp;#93;&amp;#93;&amp;#41;&amp;#41;
+
+&amp;#40;deftest usa-judo-scraper
+  &amp;#40;testing &amp;quot;url-by-page&amp;quot;
+    &amp;#40;let &amp;#91;test-url &amp;#40;usa/url-by-page 1&amp;#41;&amp;#93;
+      ;the url contains the base-url
+      &amp;#40;is &amp;#40;re-find &amp;#40;re-pattern usa/base-url&amp;#41; test-url&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt; Now we can do something interesting -- use Enlive to grab data from the built url and select the stuff we want out.&lt;/p&gt;&lt;p&gt;First, I have defined a scraper.utils namespace for enlive functions I'm sure I'll be sharing among multiple web scrapers.&lt;pre&gt;&lt;code&gt;&amp;#40;ns grapplevents-rest.scraper.utils
+  &amp;#40;:require &amp;#91;net.cgrand.enlive-html :as html&amp;#93;&amp;#41;&amp;#41;
+
+&amp;#40;defn fetch-url
+  &amp;quot;Grab the contents of the url specified&amp;quot;
+  &amp;#91;url&amp;#93;
+  &amp;#40;html/html-resource  &amp;#40;java.net.URL. url&amp;#41;&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt; Now we can select the actual elements from the page&lt;/p&gt;&lt;pre&gt;&lt;code&gt;&amp;#40;defn get-page-events
+  &amp;quot;Return a list of events found on a given page, a map with enlive tags&amp;quot;
+  &amp;#91;p&amp;#93;
+  &amp;#40;-&amp;gt; &amp;#40;url-by-page p&amp;#41;
+      &amp;#40;utils/fetch-url&amp;#41;
+      &amp;#40;html/select &amp;#91;:div.list-item.clearfix&amp;#93;&amp;#41;&amp;#41;&amp;#41;
+&lt;/code&gt;&lt;/pre&gt;We should use a mock for testing this last bit.  I manually captured the text source of a page that yielded 10 events, and saved it for feeding in as input.  To mock the web request we override the definition of our utility method with one that responds with the saved text file.  Adding the following method to the utils namespace&lt;pre&gt;&lt;code&gt;&amp;#40;defn fetch-file
+  &amp;quot;Grab the contents of the file specified&amp;quot;
+  &amp;#91;filename&amp;#93;
+  &amp;#40;html/html-resource  &amp;#40;java.io.File. filename&amp;#41;&amp;#41;&amp;#41;
+&lt;/code&gt;&lt;/pre&gt;An now we can test as follows&lt;pre&gt;&lt;code&gt;   &amp;#40;testing &amp;quot;get-page-events&amp;quot;
+    ;mock the web request
+    &amp;#40;with-redefs &amp;#91;utils/fetch-url
+                    &amp;#40;fn &amp;#91;&amp;#95;&amp;#93;
+                      &amp;#40;utils/fetch-file &amp;quot;test/grapplevents&amp;#95;rest/scraper/10-results.txt&amp;quot; &amp;#41;&amp;#41;&amp;#93;
+      &amp;#40;let &amp;#91;events &amp;#40;usa/get-page-events 1&amp;#41;&amp;#93;
+        &amp;#40;is &amp;#40;seq events&amp;#41;&amp;#41;
+        &amp;#40;is &amp;#40;= 10 &amp;#40;count events&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+&lt;/code&gt;&lt;/pre&gt;The argument to the mock function is discarded and we always get the contents of the text file.&lt;p&gt;Mocking this is fine for a lot of obvious reasons. But at some point there should be a true integration test that does a sanity check on the underlying assumptions of this scraper (that there are 10 results per page, or that the CSS selector continues to be correct, etc).  Today is not the day I will  address this though.&lt;/p&gt;&lt;p&gt;Now I have a function that will spit out a sequence of events from a single page.  What would be neat to have is a producer function that would concatenate  all of the events from each discreet page of events into one single sequence of events.  This will abstract the 10/events-per-page detail away from the persistence layer.&lt;/p&gt;&lt;p&gt;I will take a similar approach to what was used in the &lt;a href='/posts/2015-03-01-Fifty-four.html'&gt;Longest Increasing Subsequence&lt;/a&gt; post. I can use an ascending index value, coupled with modulo and knowing that there are 10 results per url, to figure out which page and the index on that page of the next event in the  sequence.&lt;/p&gt;&lt;p&gt;After some futzing around in the REPL we have&lt;pre&gt;&lt;code&gt;&amp;#40;defn get-all-events
+  &amp;quot;Get lazy seq of events harvested from all of the populated pages&amp;quot;
+  &amp;#40;&amp;#91;&amp;#93;
+   &amp;#40;get-all-events 0&amp;#41;&amp;#41;
+  &amp;#40;&amp;#91;c&amp;#93;
+   &amp;#40;let &amp;#91;pg &amp;#40;inc &amp;#40;quot c results-per-page&amp;#41;&amp;#41;
+         idx &amp;#40;mod c results-per-page&amp;#41;
+         l &amp;#40;get-page-events pg&amp;#41;&amp;#93;
+     &amp;#40;if &amp;#40;&amp;lt; idx &amp;#40;count l&amp;#41;&amp;#41; ;The events come in X blocks per page so decompose a bit
+          &amp;#40;cons &amp;#40;nth l idx&amp;#41;
+                &amp;#40;lazy-seq &amp;#40;get-all-events &amp;#40;inc c&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+          nil&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt; Some notes:&lt;ul&gt;&lt;li&gt;the url pages are 1-indexed so the value &lt;b&gt;pg&lt;/b&gt; is always incremented at the start&lt;/li&gt;&lt;li&gt;when we get to the last page of results it will potentially have fewer than the full 10 results.  That is why  the &lt;b&gt;(count l)&lt;/b&gt;  is used rather than just using a hardcoded 10 value&lt;/li&gt;&lt;li&gt;once we scroll off the end of the last page of results, the &lt;b&gt;(count l)&lt;/b&gt; will be zero and we will get a nil  to terminate the sequence&lt;/li&gt;&lt;/ul&gt;To test this behavior, I captured a second page of results from the live website.  The second page has only 2 eventsso we have a grand total of 12 events to play with.  Our mocked function to replace the web requests follows:&lt;pre&gt;&lt;code&gt;;mock a sequence of 12 events, ten in the first request and 2 in the second
+&amp;#40;def get-files &amp;#40;fn &amp;#91;url&amp;#93;
+                    &amp;#40;let &amp;#91;idx &amp;#40;Integer/parseInt &amp;#40;re-find #&amp;quot;\d$&amp;quot; url&amp;#41;&amp;#41;&amp;#93;
+                      &amp;#40;cond
+                        &amp;#40;= idx 1&amp;#41; &amp;#40;utils/fetch-file &amp;quot;test/grapplevents&amp;#95;rest/scraper/10-results.txt&amp;quot;&amp;#41;
+                        &amp;#40;= idx 2&amp;#41; &amp;#40;utils/fetch-file &amp;quot;test/grapplevents&amp;#95;rest/scraper/02-results.txt&amp;quot;&amp;#41;
+                        :else &amp;#40;utils/fetch-file &amp;quot;test/grapplevents&amp;#95;rest/scraper/00-results.txt&amp;quot;&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt; So page 3 and beyond always yield zero results from the selector.&lt;/p&gt;&lt;p&gt;We add tests to verify the sequence ends&lt;pre&gt;&lt;code&gt;  &amp;#40;testing &amp;quot;get-all-events&amp;quot;
+    &amp;#40;with-redefs &amp;#91;utils/fetch-url get-files&amp;#93;
+      &amp;#40;let &amp;#91;all-events &amp;#40;usa/get-all-events&amp;#41;&amp;#93;
+        &amp;#40;is &amp;#40;seq all-events&amp;#41;&amp;#41;
+        &amp;#40;is &amp;#40;= 12 &amp;#40;count all-events&amp;#41;&amp;#41;&amp;#41;
+        &amp;#40;is &amp;#40;= 12 &amp;#40;count &amp;#40;take 23 all-events&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;&lt;p&gt;Looking good so far.  But now we have created a producer function that reuquests each page from the source website 10 times.  Eeek! We should memoize this.  Use memoize.core for nifty TTL functionality.&lt;pre&gt;&lt;code&gt;;memoize this to be good scraping citizens.  Cache for 60 seconds
+&amp;#40;def cached-page-events
+  &amp;#40;memo/ttl get-page-events :ttl/threshold 60000&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt; and then update the main producer function to call the memoized version&lt;pre&gt;&lt;code&gt;&amp;#40;defn get-all-events
+  &amp;quot;Get lazy seq of events harvested from all of the populated pages&amp;quot;
+  &amp;#40;&amp;#91;&amp;#93;
+   &amp;#40;get-all-events 0&amp;#41;&amp;#41;
+  &amp;#40;&amp;#91;c&amp;#93;
+   &amp;#40;let &amp;#91;pg &amp;#40;inc &amp;#40;quot c results-per-page&amp;#41;&amp;#41;
+         idx &amp;#40;mod c results-per-page&amp;#41;
+         l &amp;#40;cached-page-events pg&amp;#41;&amp;#93;
+     &amp;#40;if &amp;#40;&amp;lt; idx &amp;#40;count l&amp;#41;&amp;#41; ;The events come in X blocks per page so decompose a bit
+          &amp;#40;cons &amp;#40;nth l idx&amp;#41;
+                &amp;#40;lazy-seq &amp;#40;get-all-events &amp;#40;inc c&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+          nil&amp;#41;&amp;#41;&amp;#41;&amp;#41;
+ &lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;&lt;p&gt;Yay!  Now we have a sequence of events that we can manipulate and persist at our leisure.&lt;/p&gt;
+</description>
+<pubDate>
+Sat, 07 Mar 2015 00:00:00 -0500
+</pubDate>
+<author>
+Eric Somdahl
+</author>
+</item>
 <item>
 <guid>
 http://ericsomdahl.github.io/posts/2015-03-01-Fifty-four.html
