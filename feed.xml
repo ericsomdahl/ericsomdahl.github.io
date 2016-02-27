@@ -15,11 +15,31 @@ http://ericsomdahl.github.io
 Pondering the ponderables
 </description>
 <lastBuildDate>
-Sun, 08 Mar 2015 19:33:05 -0400
+Fri, 26 Feb 2016 21:32:06 -0500
 </lastBuildDate>
 <author>
 Eric Somdahl
 </author>
+<item>
+<guid>
+http://ericsomdahl.github.io/posts/2016-02-26-Node-stuff.html
+</guid>
+<link>
+http://ericsomdahl.github.io/posts/2016-02-26-Node-stuff.html
+</link>
+<title>
+Learn NodeJs or... yeah
+</title>
+<description>
+&lt;h3&gt;&lt;a name=&quot;greetings&quot;&gt;&lt;/a&gt;Greetings&lt;/h3&gt;Long time no blog.  I've been wanting to pick up &lt;a href='https://nodejs.org'&gt;NodeJS&lt;/a&gt; for a while.So I started a repo to act as a reference for myself.&lt;p&gt;&lt;a href='https://github.com/ericsomdahl/lrn2node'&gt;Lrn2Node&lt;/a&gt; is my attempt.  Stay tuned.&lt;/p&gt;
+</description>
+<pubDate>
+Fri, 26 Feb 2016 00:00:00 -0500
+</pubDate>
+<author>
+Eric Somdahl
+</author>
+</item>
 <item>
 <guid>
 http://ericsomdahl.github.io/posts/2015-03-07-gevents1.html
